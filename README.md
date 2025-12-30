@@ -38,11 +38,7 @@ Groq API key (for AI question generation)
 
 Installation
 
-Clone the repository:
-
-git clone https://github.com/yourusername/vect-ai.git
-cd vect-ai
-
+Clone the repository
 
 Install dependencies:
 
@@ -85,24 +81,6 @@ Frontend: HTML, CSS, Vanilla JavaScript
 Backend: Node.js, Express.js
 
 AI Integration: Groq LLaMA-3 API
-
-Charting: Chart.js for quiz results visualization
-
-Folder Structure
-vect-ai/
-├── index.html        # Frontend HTML
-├── server.js         # Backend Express server
-├── package.json      # Node.js dependencies
-├── .env              # Environment variables
-└── README.md
-
-Future Improvements
-
-User authentication and saved study sessions
-
-More granular AI question settings (topics, types)
-
-Analytics dashboard for tracking learning progress over time
 
 License
 

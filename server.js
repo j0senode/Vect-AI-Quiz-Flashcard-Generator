@@ -1,19 +1,20 @@
-let questions = [];
-let currentIndex = 0;
-let correctCount = 0;
-let userAnswers = [];
-let mode = 'quiz';
-let isFlashcardRevealed = false;
+// Make sure all key functions are global so inline/dynamic calls can see them
+window.questions = [];
+window.currentIndex = 0;
+window.correctCount = 0;
+window.userAnswers = [];
+window.mode = 'quiz';
+window.isFlashcardRevealed = false;
 
-function toggleTheme() {
+window.toggleTheme = function() {
   const body = document.body;
   body.classList.toggle('light-mode');
   body.classList.toggle('dark-mode');
-}
+};
 
-async function startSession() {
+window.startSession = async function() {
   const notes = document.getElementById('notes').value.trim();
-  mode = document.getElementById('mode').value;
+  window.mode = document.getElementById('mode').value;
   const difficulty = document.getElementById('difficulty').value;
   const numQuestions = parseInt(document.getElementById('numQuestions').value);
 
@@ -49,11 +50,11 @@ async function startSession() {
       return;
     }
 
-    questions = data;
-    currentIndex = 0;
-    correctCount = 0;
-    userAnswers = [];
-    isFlashcardRevealed = false;
+    window.questions = data;
+    window.currentIndex = 0;
+    window.correctCount = 0;
+    window.userAnswers = [];
+    window.isFlashcardRevealed = false;
 
     document.getElementById('start-container').style.display = 'none';
     document.getElementById('quiz-container').style.display = 'block';
@@ -63,12 +64,12 @@ async function startSession() {
     errorEl.textContent = '❌ Failed to connect to server';
     console.error(err);
   }
-}
+};
 
-function showQuestion() {
+window.showQuestion = function() {
   const card = document.getElementById('question-card');
   card.innerHTML = '';
-  isFlashcardRevealed = false;
+  window.isFlashcardRevealed = false;
 
   const q = questions[currentIndex];
 
@@ -96,11 +97,7 @@ function showQuestion() {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.textContent = opt;
-
-      if (saved === opt) {
-        btn.classList.add('selected');
-      }
-
+      if (saved === opt) btn.classList.add('selected');
       btn.onclick = () => selectAnswer(opt, q.answer, q.question);
       optionsDiv.appendChild(btn);
     });
@@ -115,9 +112,9 @@ function showQuestion() {
     revealBtn.onclick = () => revealFlashcard(q.back);
     card.appendChild(revealBtn);
   }
-}
+};
 
-function selectAnswer(selected, correct, question) {
+window.selectAnswer = function(selected, correct, question) {
   userAnswers[currentIndex] = {
     question,
     selected,
@@ -128,9 +125,9 @@ function selectAnswer(selected, correct, question) {
   document.querySelectorAll('.option-btn').forEach(btn => {
     btn.classList.toggle('selected', btn.textContent === selected);
   });
-}
+};
 
-function renderNavButtons(card) {
+window.renderNavButtons = function(card) {
   const nav = document.createElement('div');
   nav.className = 'nav-buttons';
 
@@ -164,14 +161,14 @@ function renderNavButtons(card) {
 
   nav.appendChild(next);
   card.appendChild(nav);
-}
+};
 
-function finalizeQuiz() {
+window.finalizeQuiz = function() {
   correctCount = userAnswers.filter(a => a.isCorrect).length;
   showResults();
-}
+};
 
-function showResults() {
+window.showResults = function() {
   document.getElementById('quiz-container').style.display = 'none';
   document.getElementById('result-container').style.display = 'block';
 
@@ -184,16 +181,12 @@ function showResults() {
   const percentage = Math.round((correct / total) * 100);
 
   resultContainer.innerHTML = `
-    <h2 style="font-size:2rem; margin-bottom:20px;">
-      Quiz Complete 🎉
-    </h2>
-
+    <h2 style="font-size:2rem; margin-bottom:20px;">Quiz Complete 🎉</h2>
     <div class="score-summary">
       <div>You scored</div>
       <strong>${correct} / ${total}</strong>
       <div>${percentage}% correct</div>
     </div>
-
     <div class="pie-container">
       <canvas id="resultChart"></canvas>
     </div>
@@ -201,7 +194,6 @@ function showResults() {
 
   setTimeout(() => {
     const ctx = document.getElementById('resultChart').getContext('2d');
-
     new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -215,11 +207,7 @@ function showResults() {
       options: {
         responsive: true,
         cutout: '70%',
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
+        plugins: { legend: { position: 'bottom' } }
       }
     });
   }, 100);
@@ -228,9 +216,9 @@ function showResults() {
   restartBtn.textContent = 'Start New Quiz';
   restartBtn.onclick = restartQuiz;
   resultContainer.appendChild(restartBtn);
-}
+};
 
-function revealFlashcard(answer) {
+window.revealFlashcard = function(answer) {
   if (isFlashcardRevealed) return;
   isFlashcardRevealed = true;
 
@@ -248,9 +236,9 @@ function revealFlashcard(answer) {
     showQuestion();
   };
   card.appendChild(nextBtn);
-}
+};
 
-function restartQuiz() {
+window.restartQuiz = function() {
   document.getElementById('result-container').style.display = 'none';
   document.getElementById('start-container').style.display = 'block';
   document.getElementById('notes').value = '';
@@ -259,4 +247,4 @@ function restartQuiz() {
   userAnswers = [];
   currentIndex = 0;
   correctCount = 0;
-}
+};

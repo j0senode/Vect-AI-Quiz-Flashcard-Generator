@@ -4,7 +4,6 @@ let correctCount = 0;
 let userAnswers = [];
 let mode = 'quiz';
 let isFlashcardRevealed = false;
-let reviewIndex = 0;
 
 function toggleTheme() {
   const body = document.body;
@@ -172,6 +171,65 @@ function finalizeQuiz() {
   showResults();
 }
 
+function showResults() {
+  document.getElementById('quiz-container').style.display = 'none';
+  document.getElementById('result-container').style.display = 'block';
+
+  const resultContainer = document.getElementById('result-container');
+  resultContainer.innerHTML = '';
+
+  const total = questions.length;
+  const correct = correctCount;
+  const incorrect = total - correct;
+  const percentage = Math.round((correct / total) * 100);
+
+  resultContainer.innerHTML = `
+    <h2 style="font-size:2rem; margin-bottom:20px;">
+      Quiz Complete 🎉
+    </h2>
+
+    <div class="score-summary">
+      <div>You scored</div>
+      <strong>${correct} / ${total}</strong>
+      <div>${percentage}% correct</div>
+    </div>
+
+    <div class="pie-container">
+      <canvas id="resultChart"></canvas>
+    </div>
+  `;
+
+  setTimeout(() => {
+    const ctx = document.getElementById('resultChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Correct', 'Incorrect'],
+        datasets: [{
+          data: [correct, incorrect],
+          backgroundColor: ['#22c55e', '#ef4444'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }, 100);
+
+  const restartBtn = document.createElement('button');
+  restartBtn.textContent = 'Start New Quiz';
+  restartBtn.onclick = restartQuiz;
+  resultContainer.appendChild(restartBtn);
+}
+
 function revealFlashcard(answer) {
   if (isFlashcardRevealed) return;
   isFlashcardRevealed = true;
@@ -196,9 +254,9 @@ function restartQuiz() {
   document.getElementById('result-container').style.display = 'none';
   document.getElementById('start-container').style.display = 'block';
   document.getElementById('notes').value = '';
+
   questions = [];
   userAnswers = [];
   currentIndex = 0;
   correctCount = 0;
 }
-

@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -140,9 +141,7 @@ button:disabled {
   border-radius: 30px;
   padding: 40px;
   margin-top: 32px;
-  box-shadow:
-    0 25px 60px rgba(0,0,0,0.12);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
 }
 
 .light-mode .question-card {
@@ -197,8 +196,52 @@ button:disabled {
 
 .option-btn:hover {
   transform: translateX(6px);
+  box-shadow: 0 12px 28px rgba(255,59,63,0.25);
+}
+
+.option-btn.selected {
+  background: rgba(255,59,63,0.12);
+  border-color: #ff3b3f;
   box-shadow:
-    0 12px 28px rgba(255,59,63,0.25);
+    0 0 0 3px rgba(255,59,63,0.2),
+    0 10px 24px rgba(255,59,63,0.35);
+  transform: translateX(6px);
+  font-weight: 600;
+}
+
+.option-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Navigation buttons */
+.nav-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.nav-buttons button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.nav-buttons button:first-child {
+  background: transparent;
+  color: inherit;
+  border: 1.5px solid rgba(255,59,63,0.4);
+  box-shadow: none;
+}
+
+.nav-buttons button:first-child:hover {
+  background: rgba(255,59,63,0.08);
+  transform: translateY(-1px);
+}
+
+.nav-buttons button:last-child {
+  font-weight: 700;
 }
 
 /* Flashcards */
